@@ -49,7 +49,7 @@ RCS_vs_freq(radius = 0.5, ratio = np.arange(0.01,1.61,0.01), \
             sphere_material = DielectricMaterial(1e8,0,1e-8,0), \
             sensor_location = [0,0,-2000], save_file = 'PEC')
 ```
-![PEC Sphere in vacuum](PEC.png)
+![PEC Sphere in vacuum](files/PEC.png)
 
 Note: the variable `ratio` is defined as `radius / wavelength`. To have the x-axis be in terms of `ratio`, use function `plotOneMonoRCS()`. This function accepts either `ratio`, `frequency`, or `wavelength`, and plots it on the x axis. :
 ```
@@ -64,7 +64,7 @@ sensor_location = [0,0,-2000] #meters
 plotOneMonoRCS(radius, sphere_material, background, mono_RCS, ratio = ratio, \
                 savefile = "lossy_dielectric_mono_rcs")
 ```
-![Lossy Dielectric Monostatic RCS](lossy_dielectric_mono_rcs.png)
+![Lossy Dielectric Monostatic RCS](figures/lossy_dielectric_mono_rcs.png)
 
 &nbsp;
 
@@ -79,7 +79,7 @@ phi = 0
 (theta, bi_RCS) = Bistatic_RCS(radius, 1e9, background, sphere, distance, phi, show_plot=1)
 saveBiRCSData("bistatic_perfect_dielectric_example", bi_RCS, theta, 1e9, sphere)
 ```
-![Bistatic RCS for Lossy Dielectric](bistatic_lossy_dielectric_example.png)
+![Bistatic RCS for Lossy Dielectric](figures/bistatic_lossy_dielectric_example.png)
 
 &nbsp;
 
@@ -97,7 +97,7 @@ param1 = TestParameters([0,0,-2000], np.logspace(7,9,100))
 Compare_RCS_vs_freq([case1,case2], param1, "example_2_material_comparison")
 ```
 
-![Example 2 Material Comparison](example_2_material_comparison.png)  
+![Example 2 Material Comparison](figures/example_2_material_comparison.png)  
 
 ### Conductivity Sweep 
 To plot the RCS of a sphere at many different conductivities, one can automate the process of creating `TestCase` objects like this:
@@ -120,7 +120,7 @@ param1 = TestParameters(sensor_location, frequency)
 
 Compare_RCS_vs_freq(cases, param1, save_file = "sigma_sweep_kzhu_nmax")
 ```
-![Sigma Sweep](sigma_sweep.png)
+![Sigma Sweep](figures/sigma_sweep.png)
 
 &nbsp;
 
@@ -140,7 +140,7 @@ test_parameters = TestParameters(sensor_location, frequency)
 
 Compare_Bistatic_RCS(test_cases, test_parameters, save_file = "compare_bistatic_materials")
 ```
-![Bistatic RCS for Different Materials](compare_bistatic_materials.png)
+![Bistatic RCS for Different Materials](figures/compare_bistatic_materials.png)
 
 ### Bistatic RCS for one sphere, two frequencies
 ```
@@ -155,5 +155,5 @@ test_parameters = TestParameters(sensor_location, frequency)
 
 Compare_Bistatic_RCS(test_cases, test_parameters, save_file = "compare_bistatic_frequencies")
 ```
-![Bistatic RCS for Different Frequencies](compare_bistatic_frequencies.png)
+![Bistatic RCS for Different Frequencies](figures/compare_bistatic_frequencies.png)
 
