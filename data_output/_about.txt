@@ -1,0 +1,6 @@
+The code returns data in .txt files used to create plots of 
+RCS vs frequency (monostatic) and RCS vs angle of observation 
+(bistatic). 
+
+To reduce clutter in the root directory, sample output files 
+are moved here. 
