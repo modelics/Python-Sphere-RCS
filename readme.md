@@ -1,9 +1,16 @@
 # Python Sphere RCS Calculator 
 
-### This library uses the Mie Series to compute the Radar Cross Section for a lossy dielectric sphere.  The Radar Cross Section (RCS) can be plotted for a variety of test scenarios, such as:
+### This library uses the Mie Series to compute the Radar Cross Section for a lossy dielectric sphere.  The Radar Cross Section (RCS) can be computed and plotted for a variety of test scenarios, such as:
 * mono-static RCS versus frequency for one or many spheres
 * bi-static RCS for one or many spheres with different materials
 * bi-static RCS for one sphere at multiple frequencies
+
+This library "IN PROGRESS" can handle high frequencies and high conductivities than other publicly available RCS Solvers, such as the KZHU sphere scattering. This is accomplished by employing arbitrary precision arithmetic for critical portions of the calculation. The resutls of this library have been cross-validated with numerical solvers. 
+
+The primary application of this library is to provide Radar Cross Section data for a variety of test scenarios (see above). This is similar to calculating the back-scattering cross-section used in many plasmonics and atmospheric blah blah blah applications. To convert wetween RCS and q_back, use the relation: 
+ blah blah blah. 
+
+Also include a section on how to use the arbitrary precision. (upload the bessel_arbitrary_precision.py file)
 
 &nbsp;
 
