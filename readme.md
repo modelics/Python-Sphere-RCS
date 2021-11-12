@@ -35,7 +35,7 @@ The calculations in this library assume that an x-polarized wave travels in the 
 
 To observe differences caused by plane wave polarization in the bistatic case, change the phi variable. For example, to see RCS from y-polarized waves, set phi = pi/2. For circularly polarized waves, compute as a linear superposition of two modes. 
 
-<img src="coord_system.png" alt="Coordinate System" width="400">
+<img src="figures/coord_system.png" alt="Coordinate System" width="400">
 
 # Example Usage
 
