@@ -15,6 +15,7 @@
 1. C. A. Balanis, Advanced Engineering Electromagnetics. New York, NY: John Wiley & Sons, Inc., 1989.
 2.  G. Kevin Zhu (2021). Sphere scattering (https://www.mathworks.com/matlabcentral/fileexchange/31119-sphere-scattering), MATLAB Central File Exchange.
 3. W. J. Wiscombe, "Improved Mie scattering algorithms," Appl. Opt. 19, 1505-1509 (1980)
+4. Allardice, J. R., & Le Ru, E. C. (2014). Convergence of Mie theory series: criteria for far-field and near-field properties. Applied Optics, 53(31), 7224. doi:10.1364/ao.53.007224
 
 &nbsp;
 
