@@ -49,7 +49,7 @@ RCS_vs_freq(radius = 0.5, ratio = np.arange(0.01,1.61,0.01), \
             sphere_material = DielectricMaterial(1e8,0,1e-8,0), \
             sensor_location = [0,0,-2000], save_file = 'PEC')
 ```
-![PEC Sphere in vacuum](files/PEC.png)
+![PEC Sphere in vacuum](PEC.png)
 
 Note: the variable `ratio` is defined as `radius / wavelength`. To have the x-axis be in terms of `ratio`, use function `plotOneMonoRCS()`. This function accepts either `ratio`, `frequency`, or `wavelength`, and plots it on the x axis. :
 ```
