@@ -1,3 +1,19 @@
+This code is based on the MATLAB "Sphere scattering" authored by Kevin Zhu. 
+The original license notice is reproduced below. Redistribution of this 
+library with and without modifications is permitted as long as 
+
+  (1) the copyright notice (below) is included,
+  (2) the authors of the work are cited as follows: 
+        G. Kevin Zhu (2021). Sphere scattering, MATLAB Central File Exchange.
+            (https://www.mathworks.com/matlabcentral/fileexchange/31119-sphere-scattering)
+        I. Shofman, D. Marek, S. Sharma, P. Triverio, Python Sphere RCS,
+            (https://github.com/modelics/Sphere-RCS/)
+            
+
+----------
+From Matlab File Eschanfe, Sphere scattering. 
+(https://www.mathworks.com/matlabcentral/fileexchange/31119-sphere-scattering)
+
 Copyright (c) 2011, Kevin Zhu
 All rights reserved.
 
