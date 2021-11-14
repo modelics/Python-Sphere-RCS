@@ -8,14 +8,14 @@ tags:
   - dielectric spheres
   - Radar Cross Section
 authors:
-  - name: Iliya Shofman^[co-first author] # note this makes a footnote saying 'co-first author'
+  - name: Iliya Shofman # note this makes a footnote saying 'co-first author'
     orcid: 0000-0003-1798-8337
     affiliation: 1 # (Multiple affiliations must be quoted)
-  - name: Damian Marek^[co-first author] # note this makes a footnote saying 'co-first author'
+  - name: Damian Marek # note this makes a footnote saying 'co-first author'
     affiliation: 1
-  - name: Shashwat Sharma^[co-first author] # note this makes a footnote saying 'co-first author'
+  - name: Shashwat Sharma # note this makes a footnote saying 'co-first author'
     affiliation: 1
-  - name: Piero Triverio^[co-first author] # note this makes a footnote saying 'co-first author'
+  - name: Piero Triverio # note this makes a footnote saying 'co-first author'
     affiliation: 1
 affiliations:
  - name: Dept. of Electrical & Computer Engineering, University of Toronto
