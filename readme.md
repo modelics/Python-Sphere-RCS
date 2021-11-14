@@ -5,12 +5,9 @@
 * bi-static RCS for one or many spheres with different materials
 * bi-static RCS for one sphere at multiple frequencies
 
-This library "IN PROGRESS" can handle high frequencies and high conductivities than other publicly available RCS Solvers, such as the KZHU sphere scattering. This is accomplished by employing arbitrary precision arithmetic for critical portions of the calculation. The resutls of this library have been cross-validated with numerical solvers. 
+This library can perform calculations at high frequencies and for highly-conductivie materials than other publicly available RCS Solvers such as in [2]. This is accomplished by employing arbitrary precision arithmetic for critical portions of the calculation. The resutls of this library have been cross-validated with numerical solvers. 
 
-The primary application of this library is to provide Radar Cross Section data for a variety of test scenarios (see above). This is similar to calculating the back-scattering cross-section used in many plasmonics and atmospheric blah blah blah applications. To convert wetween RCS and q_back, use the relation: 
- blah blah blah. 
 
-Also include a section on how to use the arbitrary precision. (upload the bessel_arbitrary_precision.py file)
 
 &nbsp;
 
@@ -164,3 +161,6 @@ Compare_Bistatic_RCS(test_cases, test_parameters, save_file = "compare_bistatic_
 ```
 ![Bistatic RCS for Different Frequencies](figures/compare_bistatic_frequencies.png)
 
+# Notes
+* While arbitrary precision arithmetic is not necessary in most calculation scenarios, one can use the functions in `bessel_arbitrary_precision.py`.
+* Radar Cross Section may be related to Scattering cross section, which is frequently used in plasmonics applications. The relation is RCS = Q_back * 4*pi * p * radius^2 
