@@ -31,7 +31,7 @@ bibliography: paper.bib
 
 Mie series provide an analytic solution to the problem of scattering of a plane electromagnetic wave by a homogenous sphere. The aggregate result of this calculation is known as the Radar Cross Section (RCS), which is a pattern of the relative intensity of the scattered electromagnetic wave. Knowledge of the Radar Cross Section, and its dependence on frequency, angle, sphere material, etc., are useful in many engineering and scientific applications ranging from Radar Imaging to atmospheric science. Furthermore, RCS values obtained from the analytic results from the Mie series are used to verify the correctness of numerical results from computational electromagnetic solvers. 
 
-![Pattern of scattered electric field intensity for different angles of observation.](compare_bistatic_materials.png){ width = 50% }
+![Pattern of scattered electric field intensity for different angles of observation.](compare_bistatic_materials.png)
 
 # Statement of need
 
@@ -39,11 +39,10 @@ While several open-source libraries for Mie series RCS calculations exist, those
 
 `Python Sphere RCS` can perform calculations in the high-frequency high-conductivity regime by incorporating arbitrary precision mathematics in the critical portions of the calculation, while solving several computational issues that beset the existing publicly available solvers. Results from this solver were cross validated with numerical solvers to good visual agreement (see plot below).
 
-![Validation Plot against Results obtained with Method of Moments Solver.](bistatic_validation.png){ width=50% }
+![Validation Plot against Results obtained with Method of Moments Solver.](bistatic_validation.png)
 
 The focus of this code is producing and plotting RCS through easy-to-use interface functions. Examples of various plots that can be made are provided along with the code used to generate them. The `Python Sphere RCS` library can benefit the broader scientific community to enable research and educational endeavors. 
 
 
 # Acknowledgements
-
 We acknowledge the support of the Natural Sciences and Engineering Research Council of Canada (NSERC).
