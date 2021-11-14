@@ -2,8 +2,8 @@ from getDielectricSphereFieldUnderPlaneWave import *
 from DielectricMaterial import *
 from src import *
 from TestCase import *
-#add any user needed imports, such as matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 
 def RCS_vs_freq(radius, ratio, background_material, sphere_material, sensor_location, save_file=None, show_plot=1):
     '''
@@ -28,8 +28,6 @@ def RCS_vs_freq(radius, ratio, background_material, sphere_material, sensor_loca
     
     #writing mono RCS data to text file, if filename is given
     if save_file:
-        if not (save_file.endswith(".png")):
-            save_file += ".png"
         saveMonoRCSData(save_file, mono_RCS, frequency, sphere_material, radius)
 
     return (frequency, mono_RCS)
@@ -386,7 +384,7 @@ def Compare_Bistatic_RCS(test_cases, test_parameters, save_file = None):
     
     #just a single bistatic RCS plot
     if (len(test_cases) == 1 and frequency.size == 1 ):
-        print("Compare_Bistatic_RCS cases 1, frequency 1")
+        print("\tCompare_Bistatic_RCS cases 1, frequency 1")
         case = test_cases[0]
         param = test_parameters[0]
         radius = case.radius
@@ -403,7 +401,7 @@ def Compare_Bistatic_RCS(test_cases, test_parameters, save_file = None):
     
     #multiple spheres, one frequency
     if (len(test_cases) >= 1 and frequency.size == 1):
-        print("Compare_Bistatic_RCS cases many, frequency 1")
+        print("\tCompare_Bistatic_RCS cases many, frequency 1")
         fig, ax = plt.subplots()
         legend_entries = []
 
@@ -436,7 +434,7 @@ def Compare_Bistatic_RCS(test_cases, test_parameters, save_file = None):
         plt.grid(True, which="both", ls="--")
         
         plt.legend(legend_entries, loc='best')
-        plt.title("Bistatic RCS Comparison for Different Materias at " + "{0:.2e}".format(frequency) + " Hz")
+        plt.title("Bistatic RCS Comparison for Different Materias at " + "{0:.2e}".format(frequency[0]) + " Hz")
 
         if (save_file):
             save_filename = save_file + ".png"
@@ -445,7 +443,7 @@ def Compare_Bistatic_RCS(test_cases, test_parameters, save_file = None):
     
     #one sphere, multiple frequency
     elif(len(test_cases) == 1 and frequency.size > 1):
-        print("Compare_Bistatic_RCS cases 1, frequency many")
+        print("\tCompare_Bistatic_RCS cases 1, frequency many")
         case = test_cases[0]
         radius = case.radius
         background = case.background_material
@@ -633,6 +631,7 @@ def plotFromFile(filenames, plt_type, save_file=''):
 
 
 if __name__ == '__main__':
+
     '''
     radius = 0.5 #meters
     ratio = np.arange(0.01,1.61,0.01)
@@ -672,7 +671,7 @@ if __name__ == '__main__':
     '''
     
     #testing PEC sphere
-    #(freq, mono_RCS) = RCS_vs_freq(radius = 0.5, ratio = np.arange(0.01,1.61,0.01), background_material = DielectricMaterial(1,0), sphere_material = DielectricMaterial(1e8,0,1e-8,0), sensor_location = [0,0,-2000], save_file = 'PEC', show_plot = 1)
+    #(freq, mono_RCS) = RCS_vs_freq(radius = 0.5, ratio = np.arange(0.01,1.61,0.01), background_material = DielectricMaterial(1,0), sphere_material = DielectricMaterial(1e8,0,1e-8,0), sensor_location = [0,0,-2000], save_file = None, show_plot = 1)
 
     #testing plot with ratio on x axis
     '''
@@ -775,6 +774,7 @@ if __name__ == '__main__':
     #plotFromFile(['bistatic_lossy_dielectric_example.txt', "bistatic_perfect_dielectric_example.txt"], 'bi', save_file='plot_from_file_example_2')
 
     #validating with MoM Solver Results
+    '''
     radius = 0.5
     frequency = 1000000000
     background = DielectricMaterial(1,0)
@@ -784,6 +784,7 @@ if __name__ == '__main__':
 
     Bistatic_RCS(radius, frequency, background, sphere, distance, phi, save_filename ="calculations", show_plot = 0)
     plotFromFile(['sigma1e3_eaefie_bRCS_f_1000000000_Hz.txt', 'calculations.txt'], 'bi')
+    '''
     #old debugging inputs
     '''
     radius = 0.5;

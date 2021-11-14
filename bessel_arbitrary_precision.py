@@ -1,6 +1,33 @@
+# same functions as bessel.py 
+# but using arbitrary precision library mpmath
+# (https://mpmath.org/doc/0.19/index.html)
+
+# Libraries that calculate bessel functions using fixed-precision 
+# floating point variables may fail to evaluate besselj and bessely
+# functions accuratelly. 
+#
+# For example, scipy.special 's jv(nu=0.5, x=9.4e14 + 1e-20j)
+# returns (nan+nanj). MATLAB builtin besselj(0.5, 9.4e14 + 1e-20j)
+# returns -1.7286e-08 + 1.6554e-24i. 
+# For comparison, mpmath 's besselj(0.5, 9.4e14 + 1e-20j) returns
+# mpc(real='-1.7286313...e-8', imag='-1.945349...e-28').
+#  
+# Clearly, using mpmath is preffered over scipy.special since the former 
+# can compute more extreme inputs, which arise at high frequencies
+# and high sphere conductivities. 
+#
+# To reap the benefits of arbitrary precision arithmetic, it 
+# is sufficient to evaluate only the bessel functions using mpmath
+# thereby avoiding scenarious where the result is (nan+nanj).
+
 import numpy as np
 import scipy.special as ss
 import mpmath as mp
+
+# set precision (default = 15 decimal places)
+# for example, let's set to 50 decimal place precision
+# this will be applied only to evaluate besselj,bessely functions
+mp.dps = 50
 
 def ric_besselj(nu,x,scale = 1):
     '''
@@ -19,26 +46,20 @@ def ric_besselj(nu,x,scale = 1):
     '''
     M = max(np.shape(x))
     N = max(np.shape(nu))
-    x = np.reshape(np.array(x), (1, M))
-    nu = np.reshape(np.array(nu), (N,1))
     a = np.zeros((N, M), np.complex128)
 
-
-    if (scale == 1):
-        for i in range(0, N):
-            a[i,:] =  np.sqrt(np.pi*x/2) * ss.jve(nu[i]+0.5, x) 
-    elif (scale == 0):
-        for i in range(0, N):
-            a[i,:] =  np.sqrt(np.pi*x/2) * ss.jv(nu[i]+0.5, x)
-    else:
-        print('incorrect input to ric_besselj')
+    if (scale != 0 and scale != 1):
+        print("incorrect argument ric_besselj (scale)")
+        return
     
-    '''
     for i in range(0, len(nu)):
     	for j in range(0, len(x)):
-            y = np.sqrt(np.pi * x[j] / 2) * mp.besselj(nu[i]+0.5, x[j]) * np.e**(-1*abs(np.imag(x[j])))
+            if (scale == 1):
+                y = np.sqrt(np.pi * x[j] / 2) * mp.besselj(nu[i]+0.5, x[j])* np.e**(-1*abs(np.imag(x[j])))
+            elif (scale == 0):
+                y = np.sqrt(np.pi * (x[j]) / 2) * mp.besselj(nu[i]+0.5, x[j])
             a[i,j] = complex(y.real, y.imag)
-    '''
+
     return a
 
 def ric_besselj_derivative(nu, x, flag = 1):
@@ -51,22 +72,18 @@ def ric_besselj_derivative(nu, x, flag = 1):
             flag: 1 for first order derivative, 2 for second order derivative. 
     '''
     M = max(np.shape(x))
-    x = np.reshape(np.array(x), (1, M))
-    nu = np.reshape(np.array(nu), (len(nu), 1))
+    M = max(np.shape(x))
+    
     
     #debugging print statements
     #print(x)
     #print(np.shape(x))
     #print(len(x))
 
-    temp = np.matmul(np.ones((len(nu), 1)), x)
+    temp = np.matmul(np.ones((len(nu), 1)), np.reshape(np.array(x), (1, M)))
 
     if (flag == 1):
-        #J = 0.5*( ric_besselj(nu-1, x) + (1/temp)*ric_besselj(nu,x) - ric_besselj(nu+1, x) )
-        J0 = ric_besselj(nu-1, x)
-        J1 = (1/temp)*ric_besselj(nu,x)
-        J2 = ric_besselj(nu+1, x)
-        J = 0.5*(J0+ J1 - J2)
+        J = 0.5*( ric_besselj(nu-1, x) + (1/temp)*ric_besselj(nu,x) - ric_besselj(nu+1, x) )
     elif (flag == 2):
         J = 0.5 * ( ric_besselj_derivative(nu-1,x) + (1/temp)*ric_besselj_derivative(nu, x) \
                     - (1/(temp**2)) * ric_besselj(nu,x)  - ric_besselj_derivative(nu+1, x) )
@@ -75,6 +92,9 @@ def ric_besselj_derivative(nu, x, flag = 1):
     
     #removing all the zeros from inside the matrix...
     #f x*nu was 0, then it should become 0 after calculation
+    x = np.reshape(np.array(x), (1, M))
+    nu = np.reshape(np.array(nu), (len(nu), 1))
+
     temp1 = np.matmul(np.ones((len(nu), 1)), x)
     J[temp1 == 0] = 0
 
@@ -89,27 +109,24 @@ def ric_bessely(nu, x, scale = 1):
     '''
     M = max(np.shape(x))
     N = max(np.shape(nu))
-    x = np.reshape(np.array(x), (1, M))
-    nu = np.reshape(np.array(nu), (N,1))
     a = np.zeros((N, M), np.complex128)
 
-    if (scale == 1):
-        for i in range(0, N):
-            #print(nu, type(nu), type(nu[0]))
-            #print(x, type(x), type(x[0]))
-            a[i,:] =  np.sqrt(np.pi*x/2) * ss.yve(nu[i]+0.5, x) 
-    elif (scale == 0):
-        for i in range(0, N):
-            a[i,:] =  np.sqrt(np.pi*x/2) * ss.yv(nu[i]+0.5, x)
-    else:
-        print('incorrect input to ric_besselj')
+
+    if (scale != 0 and scale != 1):
+        print("incorrect argument ric_bessely (scale)")
+        return
+    
+    for i in range(0, len(nu)):
+    	for j in range(0, len(x)):
+            if (scale == 1):
+                y = np.sqrt(np.pi * x[j] / 2) * mp.bessely(nu[i]+0.5, x[j]) * np.e**(-1*abs(np.imag(x[j])))
+            elif (scale == 0):
+                y = np.sqrt(np.pi * (x[j]) / 2) * mp.bessely(nu[i]+0.5, x[j])
+            a[i,j] = complex(y.real, y.imag)
     
     # handling the case where x is zero because bessely is poorly defined 
-    temp = np.matmul(np.ones((N,1)), x)
+    temp = np.matmul(np.ones((N,1)), np.reshape(np.array(x), (1, M)))
     a[temp == 0] = float('-inf')
-
-    temp1 = np.matmul(nu, np.ones((1,M)))
-    a[temp+temp1 == 0] = -1
 
     return a
 
@@ -123,29 +140,28 @@ def ric_bessely_derivative(nu, x, flag = 1):
             Y_{nu}(x) = \sqrt{\frac{\pi x}{2}} Y_{nu+1/2}(x)
 
         Inputs:
-        nu         order of the riccati Bessel's function. Must be a column vector.   
-        x          row vector of size parameters at each frequency
-        flag       1, first order derivative ; 2, second order derivative
+        nu: order of Riccati-Bessel Function, integer sequence from 1:N as an array
+            x: arguments to Ric-Bessel Function, as a vector with M elements, where M is 
+                number of frequencies 
+                Note: if x == 0, then a ValueError is raised (because bessely(nu,0)= -inf)
+                      This should not happen because size parameters are non-zero
+            flag: 1 for first order derivative, 2 for second order derivative. 
     '''
     M = max(np.shape(x))
     N = max(np.shape(nu))
-    x = np.reshape(np.array(x), (1, M))
-    nu = np.reshape(np.array(nu), (N, 1))
     
-    temp = np.matmul(np.ones((N, 1)), x)
+    temp = np.matmul(np.ones((N, 1)), np.reshape(np.array(x), (1, M)))
     if (flag == 1):
         Y = 0.5 * (ric_bessely(nu-1, x) + (1.0/temp)* ric_bessely(nu,x) - ric_bessely(nu+1, x) )
-        #Y0 = ric_bessely(nu-1, x);
-        #Y1 = (1/temp)*ric_bessely(nu,   x);
-        #Y2 = ric_bessely(nu+1, x);
-        #Y = 0.5*(Y0+ Y1- Y2);
-        #print("Y0:\n", Y0,"\nY1:\n", Y1, "\nY2:\n", Y2, "\nY:\n", Y)
     elif (flag == 2):
         Y = 0.5 * ( ric_bessely_derivative(nu-1,x) + (1/temp)*ric_bessely_derivative(nu, x) \
                     - (1/(temp**2)) * ric_bessely(nu,x)  - ric_bessely_derivative(nu+1, x) )
     else:
         print('error: third argument passed to ric_bessely_derivative must be 1 or 2')
     
+    x = np.reshape(np.array(x), (1, M))
+    nu = np.reshape(np.array(nu), (N, 1))
+
     temp2 = np.matmul(np.ones((N,1)), x)
     Y[temp2 == 0] = float('-inf')
     temp1 = np.matmul(nu, np.ones((1,M)))
@@ -163,7 +179,7 @@ def ric_besselh(nu,x, K):
             H_{nu}(x) = \sqrt{\frac{\pi x}{2}} H_{nu+1/2}(x)
         Inputs:
             nu  order of the spherical Bessel's function. Must be a column vector.
-            x   row vector of size parameters at each frequency
+            x   Must be a row vector.
             K   1 for Hankel's function of the first kind; 2 for Hankel's
                 function of the second kind.
     '''
@@ -199,50 +215,9 @@ def ric_besselh_derivative(nu, x, K, flag = 1):
 
     return H
 
-def spherical_besselj(nu,x, derivative = 0):
-    '''
-        Compute spherical bessel function of the first kind, using formula 
-        given in: Abramowitz and Stegun, p. 437, 10.1.1
-        Derivative calculated using recurrence relation in 
-        (https://dlmf.nist.gov/10.51)
-
-        Inputs:
-        nu         order of the riccati Bessel's function. Must be a column vector.   
-        x          row vector of size parameters at each frequency
-        derivative       1, first order derivative ; 0, none.
-    '''
-    M = max(np.shape(x))
-    N = max(np.shape(nu))
-    x = np.reshape(np.array(x), (1, M))
-    nu = np.reshape(np.array(nu), (N,1))
- 
-    j = ss.spherical_jn(nu, x, derivative)
-
-    return j
-
-def spherical_besselh(nu,x, derivative = 0):
-    '''
-        Compute spherical hankel function of the first kind, using formula 
-        given in: Abramowitz and Stegun, p. 437, 10.1.1
-        Derivative calculated using recurrence relation in 
-        (https://dlmf.nist.gov/10.51)
-
-        Inputs:
-        nu         order of the riccati Bessel's function. Must be a column vector.   
-        x          row vector of size parameters at each frequency
-        derivative       1, first order derivative ; 0, none.
-    '''
-    M = max(np.shape(x))
-    N = max(np.shape(nu))
-    x = np.reshape(np.array(x), (1, M))
-    nu = np.reshape(np.array(nu), (N,1))
- 
-    J = ss.spherical_jn(nu, x, derivative)
-    Y = ss.spherical_yn(nu, x, derivative)
-    H = J + (1.0j)*Y
-    return H
-
 if __name__ == "__main__":
+    #debugging test script
+    '''
     from DielectricMaterial import *
     radius = 0.5;
     sphere = DielectricMaterial(2.56,0.01)
@@ -253,18 +228,11 @@ if __name__ == "__main__":
     x = []      #size parameter
     for f in frequency:
         x += [radius * sphere.getWaveNumber(f)]
+    print(x)
+    print(type(x[0]))
+
     nu = np.arange(1,5,1)
-    #using kzhu ricatti bessel
-    result1 = ric_besselj_derivative(nu,x,1)
-
-    M = max(np.shape(x))
-    N = max(np.shape(nu))
-    x = np.reshape(np.array(x), (1, M))
-    nu = np.reshape(np.array(nu), (N,1))
-    #using recurrence relations and scipy special
-    result2 =   x*spherical_besselj(nu-1,x) - nu*spherical_besselj(nu,x)
-
-    print(result1)
-    print("")
-    print(result2)
-
+    print(nu)
+    a = ric_besselj_derivative(nu,x,flag=1)
+    print(a)
+    '''

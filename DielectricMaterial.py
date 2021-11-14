@@ -40,7 +40,7 @@ class DielectricMaterial:
 
     def convertToLength(self, f, x):
         '''
-            f    frequency
+            f    frequency, type np.array
             x    length (skin depth)
         '''
         z = x*self.getAbsorptionDepth(f)
@@ -51,6 +51,7 @@ class DielectricMaterial:
             x = getAbsorptionDepth(this, frequency) calculates the absorption
             depth from the wave number. The absorption depth is always
             positive regardless the choice of the time-harmonic factor.
+            f    frequency, type np.array
         '''
         k = self.getWaveNumber(frequency)
         x = abs(np.real(1j*k))
@@ -59,7 +60,7 @@ class DielectricMaterial:
     def getComplexPermeability(self, frequency):
         ''' computes the relative complex permeability.
             Input:
-                frequency    Nx1 vector (Hz)
+                frequency    Nx1 vector (Hz) type np.array
 
             Note: will fail for frequency = 0
         '''
@@ -69,7 +70,7 @@ class DielectricMaterial:
     def getComplexPermittivity(self, frequency):
         ''' computes the relative complex permittivity.
             Input:
-                frequency    Nx1 vector (Hz)
+                frequency    Nx1 vector (Hz) type np.array
 
             Note: will fail for frequency = 0
         '''
@@ -91,6 +92,7 @@ class DielectricMaterial:
         pass
     
     def getIntrinsicImpedance(self, frequency):
+        
         eta_0 = np.sqrt(self.mu_0 / self.eps_0)
         eta = eta_0 * \
               np.sqrt( self.getComplexPermeability(frequency) / self.getComplexPermittivity(frequency) )
@@ -119,6 +121,9 @@ class DielectricMaterial:
         return wavelength
     
     def getWaveNumber(self, frequency):
+        '''
+            f    frequency, type np.array
+        '''
         permittivity = self.getComplexPermittivity( frequency);
         permeability = self.getComplexPermeability( frequency);
         k = 2*np.pi*(frequency/self.c_0)*np.sqrt((permittivity*permeability));

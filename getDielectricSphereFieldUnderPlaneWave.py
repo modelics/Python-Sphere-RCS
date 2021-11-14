@@ -23,7 +23,25 @@ def getDielectricSphereFieldUnderPlaneWave(radius, sphere, background, sensor_lo
         H_r, H_phi, H_theta     Nx1 vector (A/m)           
        
     '''
+    [r, theta, phi] = cartToSph(sensor_location[0],sensor_location[1],sensor_location[2])
+
+    # number of mie terms to evaluate
+    #based off wiscombe recommendation
+    N = getNMax(radius, sphere, background, frequency)
+    #print("NMax: ", N)
+
+    nu = np.arange(1,N+1,1)
+
     
+    #need to convert frequency into numpy array
+    if (type(frequency) == int or type(frequency) == float):
+        frequency = [frequency]
+    if (type(frequency) == list or type(frequency) == np.ndarray):
+        frequency = np.array(frequency)
+        frequency = frequency.flatten() 
+        M = len(frequency)
+    else:
+        print("wrong data type for frequency (in getDielectricSphereFieldUnderPlaneWave)")
 
     EPS_0   = 8.8541878176*1e-12
     MU_0    = 4*np.pi*1e-7
@@ -52,25 +70,7 @@ def getDielectricSphereFieldUnderPlaneWave(radius, sphere, background, sensor_lo
     print(eps_s)
     '''
 
-    # number of mie terms to evaluate
-    #based off wiscombe recommendation
-    N = getNMax(radius, sphere, background, frequency)
-    print("NMax: ", N)
-
-    #need to convert frequency into numpy array
-    if (type(frequency) == int or type(frequency) == float):
-        frequency = [frequency]
-    if (type(frequency) == list or type(frequency) == np.ndarray):
-        frequency = np.array(frequency)
-        frequency = frequency.flatten() 
-        M = len(frequency)
-    else:
-        print("wrong data type for frequency (in getDielectricSphereFieldUnderPlaneWave)")
-    
-    nu = np.arange(1,N+1,1)
-
-    [r, theta, phi] = cartToSph(sensor_location[0],sensor_location[1],sensor_location[2])
-
+ 
     a_n = np.ones((len(frequency), len(nu)), np.complex128)
     for c in range(0, len(nu)):
         n = nu[c]
