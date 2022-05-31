@@ -5,11 +5,9 @@
 * bi-static RCS for one or many spheres with different materials
 * bi-static RCS for one sphere at multiple frequencies
 
-&nbsp;
 
 ### The code is supplemented by several functions for generating, saving, and plotting RCS data. Since the Mie Series produces an analytical result, this code can be used to verify results obtained using numerical computational electromagnetic solvers.
 
-&nbsp;
 
 ### This code is primarily based on the following works:
 1. C. A. Balanis, Advanced Engineering Electromagnetics. New York, NY: John Wiley & Sons, Inc., 1989.
@@ -17,7 +15,6 @@
 3. W. J. Wiscombe, "Improved Mie scattering algorithms," Appl. Opt. 19, 1505-1509 (1980)
 4. Allardice, J. R., & Le Ru, E. C. (2014). Convergence of Mie theory series: criteria for far-field and near-field properties. Applied Optics, 53(31), 7224. doi:10.1364/ao.53.007224
 
-&nbsp;
 
 ### Contributors to this library:
 * Iliya Shofman, Damian Marek, Shaswat Sharma, Piero Triverio  
@@ -28,8 +25,6 @@
 ## Code Requirements
 * Python version 3.x
 * `numpy`, `matplotlib`, `scipy.special`, `mpmath`
-
-&nbsp;
 
 ## Coordinate System
 The calculations in this library assume that an x-polarized wave travels in the positive z- direction. Theta (the polar angle) is zero at the positive z-axis, reaches maximum value of pi at the negative z-axis. Phi (the angle of azimuth) is zero at the positive x-axis. 
