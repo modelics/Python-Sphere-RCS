@@ -1,13 +1,9 @@
 # Python Sphere RCS Calculator 
 
-### This library uses the Mie Series to compute the Radar Cross Section for a lossy dielectric sphere.  The Radar Cross Section (RCS) can be computed and plotted for a variety of test scenarios, such as:
+### This library uses the Mie Series to compute the Radar Cross Section for a lossy dielectric sphere.  The Radar Cross Section (RCS) can be plotted for a variety of test scenarios, such as:
 * mono-static RCS versus frequency for one or many spheres
 * bi-static RCS for one or many spheres with different materials
 * bi-static RCS for one sphere at multiple frequencies
-
-This library can perform calculations at high frequencies and for highly-conductivie materials than other publicly available RCS Solvers such as in [2]. This is accomplished by employing arbitrary precision arithmetic for critical portions of the calculation. The resutls of this library have been cross-validated with numerical solvers. 
-
-
 
 &nbsp;
 
@@ -28,7 +24,8 @@ This library can perform calculations at high frequencies and for highly-conduct
 
 &nbsp;
 
-# Code Requirements
+# Overview of Library
+## Code Requirements
 * Python version 3.x
 * `numpy`, `matplotlib`, `scipy.special`, `mpmath`
 
@@ -39,7 +36,45 @@ The calculations in this library assume that an x-polarized wave travels in the 
 
 To observe differences caused by plane wave polarization in the bistatic case, change the phi variable. For example, to see RCS from y-polarized waves, set phi = pi/2. For circularly polarized waves, compute as a linear superposition of two modes. 
 
-<img src="figures/coord_system.png" alt="Coordinate System" width="400">
+<img src="figures/coord_system.png"  alt="Coordinate System" width="400">
+
+## List of Function Arguments
+This library makes use of the following parameters when computing the Radar Cross Section of dielectric spheres:
+* `radius` (meters) - the radius of the sphere
+* `ratio` (unitless) - ratio of sphere radius to wavelength
+* `frequency` (Hertz) - the frequency of impinging plane wave
+* `sensor location` - an (x,y,z) coordinate in meters at which the RCS is evaluated. The sphere is positioned at the origin.
+* `sphere_material` and `background_material` - objects of class `DielectricMaterial`
+* `save_file` (string) - output file names for saving data
+
+## Class Definitions
+This library makes use of several classes to organize the process of passing arguments to functions:
+* `DielectricMaterial`: defines a medium by its electric permittivity, electric conductivity, and magnetic permeability as `DielectricMaterial(eps_r, sigma_e=0, mu_r=1, sigma_m=0, name=None)`. For example, a silicon nanoparticle with a conductivity of 10 S/cm can be defined as `doped_silicon = DielectricMaterial(11.7, 10, 1)`. Note: a Perfect Electric Conductor can be defined by setting electric permettivity to a large value and magnetic permeability to a small value such that their product equals 1, for example, `PEC = DielectricMaterial(1e8,0,1e-8,0)` (See Balanis referene).
+
+For comparing the RCS between multiple spheres or positions, the use of the `TestCase` and `TestParameters` classes are encouraged.
+* `TestCase` - defines a sphere of some radius and material immersed in a specified medium as, for example, `PEC_nanoparticle_in_silicon = TestCase(radius = 1e-7, sphere_material = PEC, background_material = doped_silicon)`
+* `TestParameters` - groups together the sensor location and frequencies at which the RCS is to be tested for. Following the earlier example, we could call `test_1 = TestParameters([0,0,-1e-5], 2.4e9)`. 
+
+
+## List of Functions
+Using these parameters, the following functions are defined for this library:
+
+(Monostatic RCS)
+* `RCS_vs_freq (radius, ratio, background_material, sphere_material, sensor_location, save_file)`
+* `plotOneMonoRCS (radius, sphere_material, background, mono_RCS, ratio, savefile)`
+* `saveMonoRCSData (savefile, mono_RCS, frequency, sphere, radius)`
+* `Compare_RCS_vs_freq (test_cases, test_parameters, save_file)`
+
+&nbsp; (Bistatic RCS)
+* `Bistatic_RCS (radius, frequency, background, sphere, distance, phi)`
+* `plotBiRCS (radius, sphere, frequency, bi_RCS, theta, savefile)`
+* `saveBiRCSData (savefile, bi_RCS, theta, frequency, sphere)`
+* `Compare_Bistatic_RCS (test_cases, test_parameters, save_file)`
+
+
+
+
+
 
 # Example Usage
 
@@ -53,7 +88,7 @@ RCS_vs_freq(radius = 0.5, ratio = np.arange(0.01,1.61,0.01), \
             sphere_material = DielectricMaterial(1e8,0,1e-8,0), \
             sensor_location = [0,0,-2000], save_file = 'PEC')
 ```
-![PEC Sphere in vacuum](PEC.png)
+![PEC Sphere in vacuum](files/PEC.png)
 
 Note: the variable `ratio` is defined as `radius / wavelength`. To have the x-axis be in terms of `ratio`, use function `plotOneMonoRCS()`. This function accepts either `ratio`, `frequency`, or `wavelength`, and plots it on the x axis. :
 ```
@@ -161,6 +196,3 @@ Compare_Bistatic_RCS(test_cases, test_parameters, save_file = "compare_bistatic_
 ```
 ![Bistatic RCS for Different Frequencies](figures/compare_bistatic_frequencies.png)
 
-# Notes
-* While arbitrary precision arithmetic is not necessary in most calculation scenarios, one can use the functions in `bessel_arbitrary_precision.py`.
-* Radar Cross Section may be related to Scattering cross section, which is frequently used in plasmonics applications. The relation is RCS = Q_back * 4*pi * p * radius^2 
