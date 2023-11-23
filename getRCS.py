@@ -98,32 +98,32 @@ def plotOneMonoRCS(radius, sphere, background, mono_RCS, *args, **kwargs):
         plotOneMonoRCS(radius, sphere, vacuum, my_mono_RCS_data, frequency = my_frequency_values)
         plotOneMonoRCS(radius, sphere, vacuum, my_mono_RCS_data, ratio = my_ratio, savefile = 'figure1.png')
     '''
-    frequency = kwargs.get('frequency', "N/A")
-    ratio = kwargs.get('ratio', "N/A")
-    wavelength = kwargs.get('wavelength', "N/A")
-    savefile = kwargs.get('savefile', '')
-    
-    if (frequency != "N/A"):
+    frequency  = np.atleast_1d(kwargs.get('frequency', []))
+    ratio      = np.atleast_1d(kwargs.get('ratio', []))
+    wavelength = np.atleast_1d(kwargs.get('wavelength', []))
+    savefile   = kwargs.get('savefile', '')
+
+    if ( frequency.size > 0 ):
 	    xseries = frequency
-    elif (ratio != "N/A"):
+    elif ( ratio.size > 0 ):
 	    xseries = ratio
-    elif (wavelength != "N/A"):
+    elif ( wavelength.size > 0 ):
 	    xseries = wavelength
     else:
         print("wrong input (in plotOneMonoRCS")
         return
     
-    
+
     plt.grid(True, which="both", ls="--")
     plt.ylabel(r'Mono-Static RCS ($m^2$)')
 
-    if (frequency != "N/A"):
+    if ( frequency.size > 0 ):
         plt.loglog(xseries, mono_RCS)
         plt.xlabel("Frequency (Hz)")
-    elif (ratio != "N/A"):
+    elif ( ratio.size > 0 ):
         plt.semilogy(xseries, mono_RCS)
         plt.xlabel("Sphere radius in wavelengths")
-    elif (wavelength != "N/A"):
+    elif ( wavelength.size > 0 ):
         plt.loglog(xseries, mono_RCS)
         plt.xlabel("Wavelength (m)")
     
@@ -155,7 +155,7 @@ def plotOneMonoRCS(radius, sphere, background, mono_RCS, *args, **kwargs):
     if (savefile):
         if not (savefile.endswith(".png")):
             savefile += ".png"
-        plt.savefig(savefile, figsize=(12,6), dpi=80)  
+        plt.savefig(savefile, dpi=80)  
     plt.show()
 
 def plotBiRCS(radius, sphere, frequency, bi_RCS, theta, savefile =None):
@@ -438,7 +438,7 @@ def Compare_Bistatic_RCS(test_cases, test_parameters, save_file = None):
 
         if (save_file):
             save_filename = save_file + ".png"
-            plt.savefig(save_filename, figsize=(8,6)) 
+            plt.savefig(save_filename) 
         plt.show()
     
     #one sphere, multiple frequency
@@ -484,7 +484,7 @@ def Compare_Bistatic_RCS(test_cases, test_parameters, save_file = None):
 
         if (save_file):
             save_filename = save_file + ".png"
-            plt.savefig(save_filename, figsize=(8,6)) 
+            plt.savefig(save_filename) 
         plt.show() 
         
     #extra: catching errors
